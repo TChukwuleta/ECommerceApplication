@@ -22,6 +22,16 @@ namespace EcommerceApplication.Application.Services
                     *//*checkItem.Amount++;*//*
                     return ResultResponse.Failure("You already have this item in your cart. The quantity has just been increased by 1");
                 }*/
+                var existingCartItem = await _context.CartItems.Where(c => c.ItemDataId == ItemId).FirstOrDefaultAsync();
+                if (existingCartItem != null)
+                {
+                    existingCartItem.ItemDataId = ItemId;
+                    existingCartItem.CreatedBy = userId;
+                    existingCartItem.DateAdded = DateTime.Now;
+                    _context.CartItems.Update(existingCartItem);
+                    await _context.SaveChangesAsync();
+                }
+
                 var newCartItem = new CartItem
                 {
                     ItemDataId = ItemId,

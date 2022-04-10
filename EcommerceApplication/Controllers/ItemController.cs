@@ -42,7 +42,7 @@ namespace EcommerceApplication.Controllers
                         Amount = 3,
                         CreatedBy = "me"
                     };
-                    _cartService.AddToCartAsync(newItem.Id, "test", newCart);
+                    await _cartService.AddToCartAsync(newItem.Id, "test", newCart);
 
                 }
             }

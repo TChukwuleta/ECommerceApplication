@@ -31,7 +31,7 @@ namespace EcommerceApplication.Controllers
             }*/
             if (ModelState.IsValid)
             {
-                var newCart = _cartService.AddToCartAsync(ItemId, UserId, cartItem);
+                var newCart = await _cartService.AddToCartAsync(ItemId, UserId, cartItem);
                 return Ok("Welldone");
             }
 

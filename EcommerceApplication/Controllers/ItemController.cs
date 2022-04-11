@@ -1,6 +1,8 @@
 ﻿using EcommerceApplication.Application.Services;
 using EcommerceApplication.Data;
 using EcommerceApplication.Domain.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -8,6 +10,7 @@ namespace EcommerceApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ItemController : ControllerBase
     {
         private readonly AppDbContext _context;
@@ -21,9 +24,8 @@ namespace EcommerceApplication.Controllers
         [HttpPost("create")]
         public async Task<IActionResult> CreateItem(string userid, ItemData item)
         {
-            if (ModelState.IsValid)
+            try
             {
-                //
                 var newItem = new ItemData
                 {
                     Name = item.Name,
@@ -39,15 +41,17 @@ namespace EcommerceApplication.Controllers
                     {
                         ItemDataId = newItem.Id,
                         DateAdded = DateTime.Now,
-                        Amount = 3,
-                        CreatedBy = "me"
+                        Amount = newItem.Amount,
+                        CreatedBy = userid
                     };
-                    await _cartService.AddToCartAsync(newItem.Id, "test", newCart);
-
+                    await _cartService.AddToCartAsync(newItem.Id, userid, newCart);
                 }
+                return Ok( new { newItem });
             }
-
-            return new JsonResult("Something went wrong") { StatusCode = 500 };
+            catch (Exception ex)
+            {
+                return new JsonResult("Something went wrong") { StatusCode = 500 };
+            }
         }
     }
 }

@@ -1,28 +1,22 @@
 ﻿using EcommerceApplication.Application.Services;
-using EcommerceApplication.Data;
 using EcommerceApplication.Domain.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CartController : ControllerBase
+    public class OrderController : ControllerBase
     {
-        private readonly AppDbContext _context;
-        private readonly ICartService _cartService;
-
-        public CartController(AppDbContext context, ICartService cartService)
+        private readonly IOrderService _orderService;
+        public OrderController(IOrderService orderService)
         {
-            _context = context;
-            _cartService = cartService;
+            _orderService = orderService;
         }
 
-
         [HttpPost("create")]
-        public async Task<IActionResult> CreateCart(int ItemId, CartItem cartItem, string UserId)
+        public async Task<IActionResult> CreateOrder(int ItemId, string userid)
         {
             try
             {
@@ -31,12 +25,11 @@ namespace EcommerceApplication.Controllers
                 {
                     return new JsonResult("Invalid user details.") { StatusCode = 400 };
                 }*/
-                var newCart = await _cartService.AddToCartAsync(ItemId, UserId, cartItem);
-                return Ok(newCart);
+                var newOrder = await _orderService.AddOrderAsync(ItemId, userid);
+                return Ok(newOrder);
             }
             catch (Exception ex)
             {
-
                 return new JsonResult("Something went wrong") { StatusCode = 500 };
             }
         }

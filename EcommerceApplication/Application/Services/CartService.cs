@@ -16,16 +16,11 @@ namespace EcommerceApplication.Application.Services
         {
             try
             {
-                /*var checkItem = await _context.CartItems.FirstOrDefaultAsync(c => c.ItemDataId == ItemId);
-                if(checkItem != null)
-                {
-                    *//*checkItem.Amount++;*//*
-                    return ResultResponse.Failure("You already have this item in your cart. The quantity has just been increased by 1");
-                }*/
                 var existingCartItem = await _context.CartItems.Where(c => c.ItemDataId == ItemId).FirstOrDefaultAsync();
                 if (existingCartItem != null)
                 {
                     existingCartItem.ItemDataId = ItemId;
+                    existingCartItem.Amount = cartItem.Amount;
                     existingCartItem.CreatedBy = userId;
                     existingCartItem.DateAdded = DateTime.Now;
                     _context.CartItems.Update(existingCartItem);
@@ -35,6 +30,7 @@ namespace EcommerceApplication.Application.Services
                 var newCartItem = new CartItem
                 {
                     ItemDataId = ItemId,
+                    Amount = cartItem.Amount,
                     CreatedBy = userId,
                     DateAdded = DateTime.Now
                 };

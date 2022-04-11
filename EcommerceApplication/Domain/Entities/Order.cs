@@ -11,8 +11,8 @@ namespace EcommerceApplication.Domain.Entities
         public int AmountToBePaid { get; set; }
         public bool Paid { get; set; }
         public OrderStatus Status { get; set; }
+        public string StatusDesc { get; set; }
         public DateTime OrderDate { get; set; }
-        public DateTime DateShipped { get; set; }
         public string UserId { get; set; }
     }
 }

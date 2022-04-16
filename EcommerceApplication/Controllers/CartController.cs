@@ -1,6 +1,8 @@
 ﻿using EcommerceApplication.Application.Services;
 using EcommerceApplication.Data;
 using EcommerceApplication.Domain.Entities;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -9,15 +11,24 @@ namespace EcommerceApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class CartController : ControllerBase
     {
         private readonly AppDbContext _context;
         private readonly ICartService _cartService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly string accessToken;
 
-        public CartController(AppDbContext context, ICartService cartService)
+        public CartController(AppDbContext context, ICartService cartService, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _cartService = cartService;
+            _httpContextAccessor = httpContextAccessor;
+            accessToken = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString();
+            if (accessToken == null)
+            {
+                throw new Exception("You are not authorized!");
+            }
         }
 
 

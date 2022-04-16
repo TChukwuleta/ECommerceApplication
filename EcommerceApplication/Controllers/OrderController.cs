@@ -2,6 +2,8 @@
 using EcommerceApplication.Data;
 using EcommerceApplication.Domain.Entities;
 using EcommerceApplication.Domain.ViewModel;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -11,20 +13,29 @@ namespace EcommerceApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class OrderController : ControllerBase
     {
         private readonly IOrderService _orderService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly string token;
         private readonly AppDbContext _context;
+        private readonly string accessToken;
         private readonly IConfiguration _config;
         private readonly PayStackApi payStack;
-        public OrderController(IOrderService orderService, AppDbContext context, IConfiguration config)
+        public OrderController(IOrderService orderService, AppDbContext context, IConfiguration config, IHttpContextAccessor httpContextAccessor)
         {
             _orderService = orderService;
+            _httpContextAccessor = httpContextAccessor;
             _config = config;
             _context = context;
             token = _config["Payment:PaystackTest"];
             payStack = new PayStackApi(token);
+            accessToken = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString();
+            if (accessToken == null)
+            {
+                throw new Exception("You are not authorized!");
+            }
         }
 
         [HttpPost("create")]

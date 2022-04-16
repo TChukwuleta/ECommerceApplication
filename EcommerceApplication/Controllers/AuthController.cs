@@ -10,10 +10,18 @@ namespace EcommerceApplication.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly string accessToken;
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, IHttpContextAccessor httpContextAccessor)
         {
             _authService = authService;
+            _httpContextAccessor = httpContextAccessor;
+            accessToken = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString();
+            if (accessToken == null)
+            {
+                throw new Exception("You are not authorized!");
+            }
         }
 
         [HttpPost]

@@ -10,15 +10,23 @@ namespace EcommerceApplication.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    /*[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]*/
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class ItemController : ControllerBase
     {
         private readonly AppDbContext _context;
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly string accessToken;
         private readonly ICartService _cartService;
-        public ItemController(AppDbContext context, ICartService cartService)
+        public ItemController(AppDbContext context, ICartService cartService, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _cartService = cartService;
+            _httpContextAccessor = httpContextAccessor;
+            accessToken = _httpContextAccessor.HttpContext.Request.Headers["Authorization"].ToString();
+            if (accessToken == null)
+            {
+                throw new Exception("You are not authorized!");
+            }
         }
 
         [HttpPost("create")]

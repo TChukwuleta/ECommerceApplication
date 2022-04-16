@@ -5,9 +5,9 @@ namespace EcommerceApplication.Application.Services
 {
     public interface IAuthService
     {
-        Task<ResultResponse> CreateUserAsync(Customer user);
+        Task<ResultResponse> CreateUserAsync(User user);
         Task<ResultResponse> loginAsync(string email, string password);
-        Task<ResultResponse> ChangeUserStatusAsync(Customer user);
+        Task<ResultResponse> ChangeUserStatusAsync(User user);
         Task<ResultResponse> ChangePasswordAsync(string email, string oldPassword, string newPassword);
     }
 }

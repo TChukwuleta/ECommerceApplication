@@ -39,7 +39,6 @@ builder.Services.AddAuthentication(options =>
         RequireExpirationTime = false
     };
 });
-;
 
 builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
                 .AddEntityFrameworkStores<AppDbContext>();

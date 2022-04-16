@@ -27,7 +27,7 @@ namespace EcommerceApplication.Application.Services
             _jwtConfig = jwtConfig.CurrentValue;
             _config = config;
         }
-        public async Task<ResultResponse> CreateUserAsync(Customer user)
+        public async Task<ResultResponse> CreateUserAsync(User user)
         {
             try
             {
@@ -215,42 +215,47 @@ namespace EcommerceApplication.Application.Services
             return jwtToken;
         }
 
-
-       /* public async Task<AuthToken> GenerateAccessToken(User user)
+        public Task<ResultResponse> ChangeUserStatusAsync(User user)
         {
-            try
-            {
-                //TODO: Add role access level
-                List<Claim> claims = new List<Claim>() {
-                new Claim (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                new Claim (JwtRegisteredClaimNames.Email, user.Email),
-                 new Claim ("userid", user.UserId),
-                 new Claim ("bvn", string.IsNullOrWhiteSpace(user.BVN) ? "": user.BVN),
-                 new Claim ("useraccesslevel", user.UserAccessLevel.ToString()),
-                 new Claim ("roleaccesslevel",  user.UserAccessLevel.ToString())
-                };
-                JwtSecurityToken token = new TokenBuilder()
-               .AddAudience(_configuration["Token:aud"])
-               .AddIssuer(_configuration["Token:issuer"])
-               .AddExpiry(Convert.ToInt32(_configuration["TokenConstants:ExpiryInMinutes"]))
-               .AddKey(Encoding.UTF8.GetBytes(_configuration["TokenConstants:key"]))
-               .AddClaims(claims)
-               .Build();
+            throw new NotImplementedException();
+        }
 
-                string accessToken = new JwtSecurityTokenHandler().WriteToken(token);
 
-                var newToken = new AuthToken()
-                {
-                    AccessToken = accessToken,
-                    ExpiresIn = Convert.ToInt32(_configuration["TokenConstants:ExpiryInMinutes"]),
-                };
-                return await Task.FromResult(newToken);
-            }
-            catch (Exception ex)
-            {
+        /* public async Task<AuthToken> GenerateAccessToken(User user)
+         {
+             try
+             {
+                 //TODO: Add role access level
+                 List<Claim> claims = new List<Claim>() {
+                 new Claim (JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                 new Claim (JwtRegisteredClaimNames.Email, user.Email),
+                  new Claim ("userid", user.UserId),
+                  new Claim ("bvn", string.IsNullOrWhiteSpace(user.BVN) ? "": user.BVN),
+                  new Claim ("useraccesslevel", user.UserAccessLevel.ToString()),
+                  new Claim ("roleaccesslevel",  user.UserAccessLevel.ToString())
+                 };
+                 JwtSecurityToken token = new TokenBuilder()
+                .AddAudience(_configuration["Token:aud"])
+                .AddIssuer(_configuration["Token:issuer"])
+                .AddExpiry(Convert.ToInt32(_configuration["TokenConstants:ExpiryInMinutes"]))
+                .AddKey(Encoding.UTF8.GetBytes(_configuration["TokenConstants:key"]))
+                .AddClaims(claims)
+                .Build();
 
-                throw ex;
-            }
-        }*/
+                 string accessToken = new JwtSecurityTokenHandler().WriteToken(token);
+
+                 var newToken = new AuthToken()
+                 {
+                     AccessToken = accessToken,
+                     ExpiresIn = Convert.ToInt32(_configuration["TokenConstants:ExpiryInMinutes"]),
+                 };
+                 return await Task.FromResult(newToken);
+             }
+             catch (Exception ex)
+             {
+
+                 throw ex;
+             }
+         }*/
     }
 }

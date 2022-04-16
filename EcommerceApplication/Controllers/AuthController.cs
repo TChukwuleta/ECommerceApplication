@@ -18,7 +18,7 @@ namespace EcommerceApplication.Controllers
 
         [HttpPost]
         [Route("register")]
-        public async Task<IActionResult> Register(Customer user)
+        public async Task<IActionResult> Register(User user)
         {
             var newUser = await _authService.CreateUserAsync(user);
             return Ok(newUser);

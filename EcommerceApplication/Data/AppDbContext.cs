@@ -16,6 +16,7 @@ namespace EcommerceApplication.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<ItemData> ItemDatas { get; set; }
         public DbSet<ApplicationUser> ApplicationUsers { get; set; }
+        public DbSet<Transaction> Transactions { get; set; }
 
     }
 }
